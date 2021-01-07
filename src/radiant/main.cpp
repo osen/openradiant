@@ -63,10 +63,10 @@ char** g_argv;
 int main(int argc, char* argv[]);
 
 int CALLBACK WinMain(
-  __in  HINSTANCE hInstance,
-  __in  HINSTANCE hPrevInstance,
-  __in  LPSTR lpCmdLine,
-  __in  int nCmdShow
+  HINSTANCE hInstance,
+  HINSTANCE hPrevInstance,
+  LPSTR lpCmdLine,
+  int nCmdShow
 ){
 	return main(__argc, __argv);
 }

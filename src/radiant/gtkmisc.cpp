@@ -54,7 +54,9 @@
 #ifdef _WIN32
 #include <io.h>
 #include <direct.h>
+#ifndef R_OK
 #define R_OK 04
+#endif
 #endif
 #include "stdafx.h"
 

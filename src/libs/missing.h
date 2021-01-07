@@ -48,7 +48,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#define R_OK 04
+#ifndef R_OK
+  #define R_OK 04
+#endif
 
 #else // !_WIN32
 

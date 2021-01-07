@@ -3485,41 +3485,40 @@ void DoTextEditor( const char* filename, int cursorpos ){
 		HINSTANCE result;
 		Sys_Printf( "Opening file '%s'.\n", filename );
 		result = ShellExecute( (HWND)GDK_WINDOW_HWND( gtk_widget_get_window( g_pParentWnd->m_pWidget ) ), "open", filename, NULL, NULL, SW_SHOW );
-		if( (int)result <= 32 ) {
+		if( result <= (HINSTANCE)32 )
+		{
 			const char *errstr;
-			switch( (int)result ) {
-				case SE_ERR_OOM:
-				case 0:
-					errstr = _( "The operating system is out of memory or resources." );
-					break;
-				case ERROR_FILE_NOT_FOUND:
-				//case SE_ERR_FNF:
-					errstr = _( "The specified file was not found." );
-					break;
-				case SE_ERR_NOASSOC: 
-				{
-					SHELLEXECUTEINFO sei = {0};
-					sei.cbSize = sizeof( sei );
-					sei.nShow = SW_SHOWNORMAL;
-					sei.lpFile = TEXT( filename );
-					sei.fMask = SEE_MASK_CLASSNAME;
-					sei.lpVerb = TEXT( "open" );
-					sei.lpClass = TEXT( ".txt" );
+			if( result == 0 || result == (HINSTANCE)SE_ERR_OOM)
+			{
+				errstr = _( "The operating system is out of memory or resources." );
+			}
+			else if(result == (HINSTANCE)ERROR_FILE_NOT_FOUND)
+			{
+				errstr = _( "The specified file was not found." );
+			}
+			else if(result == (HINSTANCE)SE_ERR_NOASSOC)
+			{
+				SHELLEXECUTEINFO sei = {0};
+				sei.cbSize = sizeof( sei );
+				sei.nShow = SW_SHOWNORMAL;
+				sei.lpFile = TEXT( filename );
+				sei.fMask = SEE_MASK_CLASSNAME;
+				sei.lpVerb = TEXT( "open" );
+				sei.lpClass = TEXT( ".txt" );
 
-					if( ShellExecuteEx( &sei ) )
-					{
-						return;
-					}
-					errstr = _( "There is no application associated with the given file name extension." );
-					break;
+				if( ShellExecuteEx( &sei ) )
+				{
+					return;
 				}
-				case ERROR_PATH_NOT_FOUND:
-				//case SE_ERR_PNF:
-					errstr = _( "The specified path was not found." );
-					break;
-				default:
-					errstr = "";
-					break;
+				errstr = _( "There is no application associated with the given file name extension." );
+			}
+			else if(result == (HINSTANCE)ERROR_PATH_NOT_FOUND)
+			{
+				errstr = _( "The specified path was not found." );
+			}
+			else
+			{
+				errstr = "";
 			}
 			Sys_FPrintf( SYS_WRN, "Failed to open file '%s'. %s\n", filename, errstr );
 		}

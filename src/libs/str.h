@@ -49,7 +49,9 @@
 
 
 #ifdef _WIN32
-#define strcasecmp strcmpi
+  #ifndef strcasecmp
+    #define strcasecmp strcmpi
+  #endif
 #endif
 
 // NOTE TTimo __StrDup was initially implemented in pakstuff.cpp

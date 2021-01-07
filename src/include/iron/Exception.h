@@ -1,8 +1,6 @@
 #ifndef IRON_EXCEPTION_H
 #define IRON_EXCEPTION_H
 
-#include "String.h"
-
 #include <string>
 
 namespace iron
@@ -14,18 +12,18 @@ namespace _
 template <typename T>
 struct Exception
 {
-  Exception(const String<int>& message)
+  Exception(std::string message)
   {
     this->message = message;
   }
 
-  String<int> what()
+  std::string what()
   {
     return message;
   }
 
 private:
-  String<int> message;
+  std::string message;
 
 };
 

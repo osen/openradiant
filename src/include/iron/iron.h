@@ -6,7 +6,6 @@
 #include "Weak.h"
 #include "panic.h"
 #include "Vec.h"
-#include "String.h"
 #include "Exception.h"
 #include "Atomic.h"
 #include "Pool.h"

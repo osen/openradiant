@@ -10,6 +10,8 @@ if(MSVC)
   add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE")
   set(SUBSYSTEM "WIN32")
   set(RC "src/radiant/win32.rc")
+else()
+  set(RC "src/radiant/win32.rc")
 endif()
 
 include_directories(
@@ -175,10 +177,15 @@ target_link_libraries(radiant plugins
   pangoft2-1.0
   ws2_32
   gdk_pixbuf-2.0
-  iconv_a
-  zlib
   libpng
   jpeg
+
+  zlib
+  iconv_a
+
+  #z
+  #iconv
+  #Comdlg32
 )
 
 add_executable(rbake
