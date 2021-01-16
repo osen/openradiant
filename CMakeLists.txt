@@ -1,18 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
-project(RADIANT)
+cmake_minimum_required(VERSION 2.6)
+project(OPENRADIANT)
 
 string(TOLOWER "${CMAKE_CXX_COMPILER_ID}" COMP)
 string(TOLOWER "${CMAKE_SYSTEM_NAME}" PLATFORM)
 string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" ARCH)
 message("${COMP}-${PLATFORM}-${ARCH}")
-
-if(MSVC)
-  add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE")
-  set(SUBSYSTEM "WIN32")
-  set(RC "src/radiant/win32.rc")
-else()
-  set(RC "src/radiant/win32.rc")
-endif()
 
 include_directories(
   src/libs
@@ -24,17 +16,86 @@ link_directories(
   ${PROJECT_SOURCE_DIR}/contrib/${COMP}-${PLATFORM}-${ARCH}/lib
 )
 
+#set(STATIC_DIST 1)
+
+if(MSVC OR MINGW)
+  if(MSVC)
+    add_definitions("-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE")
+    set(LIBZ zlib)
+    set(LIBICONV iconv_a)
+  elseif(MINGW)
+    set(LIBZ z)
+    set(LIBICONV iconv)
+    set(LIBWIN32 Comdlg32)
+  endif()
+
+  set(SUBSYSTEM "WIN32")
+  set(RC "src/radiant/win32.rc")
+  set(NETNAME wins)
+  set(LIBGLEW glew32)
+  set(LIBGL opengl32)
+  set(LIBWINSOCK ws2_32)
+  set(LIBGTK glib-2.0 gobject-2.0 gtk-win32-2.0 gdk-win32-2.0 pango-1.0 gdkglext-win32-1.0 gtkglext-win32-1.0 pangoft2-1.0 gdk_pixbuf-2.0)
+  set(LIBXML2 libxml2)
+  set(LIBINTL intl)
+  set(LIBPNG libpng)
+  set(LIBJPEG jpeg)
+else()
+  add_definitions("-DUSE_POSIX")
+  set(NETNAME berkeley)
+  set(LIBGLEW GLEW)
+  set(LIBGL GL)
+  set(LIBM m)
+  set(LIBGTK gtkglext-x11-1.0 gdkglext-x11-1.0 gtk-x11-2.0 gdk-x11-2.0 pangocairo-1.0 cairo gdk_pixbuf-2.0 gio-2.0 pangoft2-1.0 pango-1.0 gobject-2.0 glib-2.0 atk-1.0)
+  set(LIBXML2 xml2)
+  set(LIBPNG png)
+  set(LIBJPEG jpeg)
+  set(LIBX11 Xrender Xinerama Xi Xrandr Xcursor Xcomposite Xdamage Xfixes X11 Xext)
+  set(LIBINTL intl)
+  set(LIBFONTCONFIG fontconfig)
+  set(LIBFREETYPE freetype)
+  set(LIBHARFBUZZ harfbuzz)
+  set(LIBZ z)
+
+  include_directories(
+    /usr/local/include/gtk-2.0
+    /usr/local/lib/gtk-2.0/include
+    /usr/local/include/pango-1.0
+    /usr/local/include/gio-unix-2.0
+    /usr/X11R6/include
+    /usr/local/include/cairo
+    /usr/local/include/atk-1.0
+    /usr/local/include/gdk-pixbuf-2.0
+    /usr/local/include
+    /usr/local/include/fribidi
+    /usr/X11R6/include/pixman-1
+    /usr/local/include/libpng16
+    /usr/local/include/harfbuzz
+    /usr/local/include/glib-2.0
+    /usr/local/lib/glib-2.0/include
+    /usr/X11R6/include/freetype2
+    /usr/local/include/libxml2
+    /usr/local/include/gtkglext-1.0
+    /usr/local/lib/gtkglext-1.0/include
+  )
+
+  link_directories(
+    /usr/X11R6/lib
+    /usr/local/lib
+  )
+endif()
+
 add_executable(horde
   src/private/horde/main.cpp
 )
 
-add_library(orextensions SHARED
+set(EXTENSIONS_SRC
   src/private/extensions/objexport.cpp
   src/private/extensions/hordeload.c
   src/private/horde.c
 )
 
-add_library(plugins
+set(PLUGINS_SRC
   src/plugins/imagepng/plugin.cpp
 
   src/plugins/map/plugin.cpp
@@ -67,7 +128,7 @@ add_library(plugins
   src/plugins/vfslocal/vfslocal.cpp
 )
 
-add_executable(radiant ${SUBSYSTEM}
+set(RADIANT_SRC
   src/radiant/bp_dlg.cpp
   src/radiant/brush.cpp
   src/radiant/brushscript.cpp
@@ -107,7 +168,6 @@ add_executable(radiant ${SUBSYSTEM}
   src/radiant/queuedraw.cpp
   src/radiant/select.cpp
   src/radiant/selectedface.cpp
-  src/radiant/stdafx.cpp
   src/radiant/surfacedialog.cpp
   src/radiant/surfaceplugin.cpp
   src/radiant/targetname.cpp
@@ -133,8 +193,7 @@ add_executable(radiant ${SUBSYSTEM}
   src/libs/mathlib/ray.c
   src/libs/cmdlib/cmdlib.cpp
   src/libs/l_net/l_net.c
-  #src/libs/l_net/l_net_berkeley.c
-  src/libs/l_net/l_net_wins.c
+  src/libs/l_net/l_net_${NETNAME}.c
 
   src/libs/picomodel/picointernal.c
   src/libs/picomodel/picomodel.c
@@ -164,31 +223,7 @@ add_executable(radiant ${SUBSYSTEM}
   ${RC}
 )
 
-target_link_libraries(radiant plugins
-  glib-2.0
-  gobject-2.0
-  gtk-win32-2.0
-  gdk-win32-2.0
-  libxml2
-  pango-1.0
-  gdkglext-win32-1.0
-  gtkglext-win32-1.0
-  intl
-  pangoft2-1.0
-  ws2_32
-  gdk_pixbuf-2.0
-  libpng
-  jpeg
-
-  zlib
-  iconv_a
-
-  #z
-  #iconv
-  #Comdlg32
-)
-
-add_executable(rbake
+set(RBAKE_SRC
   src/private/rbake/main.cpp
   src/private/rbake/Model.cpp
   src/private/rbake/Baker.cpp
@@ -197,9 +232,7 @@ add_executable(rbake
   src/private/rbake/Part.cpp
 )
 
-target_link_libraries(rbake)
-
-add_executable(rpreview
+set(RPREVIEW_SRC
   src/private/rpreview/Model.c
   src/private/rpreview/main.c
   src/private/rpreview/re/Buffer.c
@@ -213,4 +246,59 @@ add_executable(rpreview
   src/private/rpreview/re/util.c
 )
 
-target_link_libraries(rpreview glew32 opengl32 SDL2)
+if(STATIC_DIST)
+  add_library(openradiant
+    ${PLUGINS_SRC}
+    ${RADIANT_SRC}
+  )
+
+  add_library(orextensions
+    ${EXTENSIONS_SRC}
+  )
+  target_compile_options(orextensions PUBLIC -fPIC)
+
+  add_library(rbake
+    ${RBAKE_SRC}
+  )
+
+  add_library(rpreview
+    ${RPREVIEW_SRC}
+  )
+
+else()
+  add_executable(openradiant ${SUBSYSTEM}
+    ${PLUGINS_SRC}
+    ${RADIANT_SRC}
+  )
+
+  target_link_libraries(openradiant
+    ${LIBX11}
+    ${LIBGTK}
+    ${LIBZ}
+    ${LIBICONV}
+    ${LIBWINSOCK}
+    ${LIBWIN32}
+    ${LIBXML2}
+    ${LIBINTL}
+    ${LIBPNG}
+    ${LIBJPEG}
+    ${LIBFONTCONFIG}
+    ${LIBFREETYPE}
+    ${LIBHARFBUZZ}
+  )
+
+  add_library(orextensions SHARED
+    ${EXTENSIONS_SRC}
+  )
+
+  add_executable(rbake
+    ${RBAKE_SRC}
+  )
+
+  add_executable(rpreview
+    ${RPREVIEW_SRC}
+  )
+
+  target_link_libraries(rpreview ${LIBGLEW} ${LIBGL} ${LIBM} SDL2)
+endif()
+

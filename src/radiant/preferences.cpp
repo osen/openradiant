@@ -25,7 +25,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <assert.h>
@@ -558,11 +558,13 @@ static void OnBtnBrowseuserini( GtkWidget *widget, gpointer data ){
 	}
 }
 
+/*
 static void OnButtonClean( GtkWidget *widget, gpointer data ){
 	// make sure this is what the user wants
 	if ( gtk_MessageBox( g_PrefsDlg.GetWidget(), _( "This will close Radiant and clean the corresponding registry entries.\n"
-													"Next time you start Radiant it will be good as new. Do you wish to continue?" ),
-						 _( "Reset Registry" ), MB_YESNO ) == IDYES ) {
+		"Next time you start Radiant it will be good as new. Do you wish to continue?" ),
+		_( "Reset Registry" ), MB_YESNO ) == IDYES ) {
+
 		PrefsDlg *dlg = (PrefsDlg*)data;
 		dlg->EndModal( IDCANCEL );
 
@@ -575,6 +577,7 @@ static void OnButtonClean( GtkWidget *widget, gpointer data ){
 		_exit( 0 );
 	}
 }
+*/
 
 // =============================================================================
 // PrefsDlg class
@@ -697,7 +700,7 @@ PrefsDlg::PrefsDlg (){
 #define ENGINEPATH_ATTRIBUTE "enginepath_win32"
 #define MP_ENGINE_ATTRIBUTE "mp_engine_win32"
 #define PREFIX_ATTRIBUTE "prefix_win32"
-#elif defined( __linux__ ) || defined ( __FreeBSD__ )
+#elif defined( __linux__ ) || defined ( __FreeBSD__ ) || defined ( USE_POSIX )
 #define TOOLS_ATTRIBUTE "gametools_linux"
 #define EXECUTABLES_ATTRIBUTE "executables_linux"
 #define ENGINE_ATTRIBUTE "engine_linux"
@@ -1563,8 +1566,18 @@ void PrefsDlg::Init(){
 	g_string_append( m_inipath, PREFS_LOCAL_FILENAME );
 */
 
-	// TODO Karsten
-	std::string homedir = getenv("USERPROFILE");
+#ifdef _WIN32
+	const char *val = getenv("USERPROFILE");
+#else
+	const char *val = getenv("HOME");
+#endif
+
+	if(!val)
+	{
+		Error("Unable to locate the home directory");
+	}
+
+	std::string homedir = val;
 	std::string iniPath = homedir + "/.openradiant.conf";
 
 	//m_rc_path = g_string_new("D:\\rc.txt");
@@ -1673,11 +1686,14 @@ void PrefsDlg::BuildDialog(){
 	gtk_widget_show( button );
 	AddModalButton( button, IDOK );
 
+	//TODO: Erase the $HOME/.openradiant.conf file
+/*
 	button = gtk_button_new_with_label( _( "Clean" ) );
 	g_signal_connect( G_OBJECT( button ), "clicked", G_CALLBACK( OnButtonClean ), this );
 	gtk_box_pack_start( GTK_BOX( hbox ), button, FALSE, FALSE, 0 );
 	gtk_widget_set_size_request( button, 60, -1 );
 	gtk_widget_show( button );
+*/
 
 	hbox = gtk_hbox_new( FALSE, 5 );
 	gtk_box_pack_start( GTK_BOX( mainvbox ), hbox, TRUE, TRUE, 0 );

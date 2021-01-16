@@ -20,7 +20,7 @@
  */
 
 #define UNICODE
-#include "stdafx.h"
+#include "qe3.h"
 
 #if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
 #include <unistd.h>

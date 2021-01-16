@@ -37,7 +37,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkgl.h>
 #include <glib/gi18n.h>
-#include "stdafx.h"
+#include "qe3.h"
 #include <assert.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -479,6 +479,8 @@ int mainRadiant( int argc, char* argv[] ) {
 			libgl = "opengl32.dll";
 		#elif defined ( __linux__ ) || defined ( __FreeBSD__ )
 			libgl = "libGL.so.1";
+		#elif defined ( __OpenBSD__ )
+			libgl = "/usr/X11R6/lib/libGL.so.17.1";
 		#elif defined ( __APPLE__ )
 			libgl = "/opt/local/lib/libGL.dylib";
 		#else
@@ -582,9 +584,6 @@ int mainRadiant( int argc, char* argv[] ) {
 		}
 		g_strTempPath += "\\RadiantSettings\\";
 		Q_mkdir( g_strTempPath.GetBuffer(), 0755 );
-		g_strTempPath += RADIANT_VERSION;
-		g_strTempPath += "\\";
-		Q_mkdir( g_strTempPath.GetBuffer(), 0755 );
 	}
 	else
 	{
@@ -599,8 +598,6 @@ int mainRadiant( int argc, char* argv[] ) {
 	home = g_get_home_dir();
 	AddSlash( home );
 	home += ".radiant/";
-	Q_mkdir( home.GetBuffer(), 0775 );
-	home += RADIANT_VERSION;
 	Q_mkdir( home.GetBuffer(), 0775 );
 	g_strTempPath = home.GetBuffer();
 	AddSlash( g_strTempPath );
@@ -688,72 +685,6 @@ int mainRadiant( int argc, char* argv[] ) {
 	if ( pid ) {
 		fclose( pid );
 	}
-
-	// a safe check to avoid people running broken installations
-	// (otherwise, they run it, crash it, and blame us for not forcing them hard enough to pay attention while installing)
-	// make something idiot proof and someone will make better idiots, this may be overkill
-	// let's leave it disabled in debug mode in any case
-#ifndef _DEBUG
-	//#define CHECK_VERSION
-#endif
-#ifdef CHECK_VERSION
-	// locate and open RADIANT_MAJOR and RADIANT_MINOR
-	qboolean bVerIsGood = true;
-	Str ver_file_name;
-	ver_file_name = g_strAppPath;
-	ver_file_name += "RADIANT_MAJOR";
-	FILE *ver_file = fopen( ver_file_name.GetBuffer(), "r" );
-	if ( ver_file ) {
-		char buf[10];
-		int chomp;
-		fread( buf, 1, 10, ver_file );
-		// chomp it (the hard way)
-		chomp = 0;
-		while ( buf[chomp] >= '0' && buf[chomp] <= '9' )
-			chomp++;
-		buf[chomp] = '\0';
-		if ( strcmp( buf, RADIANT_MAJOR_VERSION ) ) {
-			Sys_FPrintf( SYS_ERR, "ERROR: file RADIANT_MAJOR doesn't match ('%s')\n", buf );
-			bVerIsGood = false;
-		}
-	}
-	else
-	{
-		Sys_FPrintf( SYS_ERR, "ERROR: can't find RADIANT_MAJOR in '%s'\n", ver_file_name.GetBuffer() );
-		bVerIsGood = false;
-	}
-	ver_file_name = g_strAppPath;
-	ver_file_name += "RADIANT_MINOR";
-	ver_file = fopen( ver_file_name.GetBuffer(), "r" );
-	if ( ver_file ) {
-		char buf[10];
-		int chomp;
-		fread( buf, 1, 10, ver_file );
-		// chomp it (the hard way)
-		chomp = 0;
-		while ( buf[chomp] >= '0' && buf[chomp] <= '9' )
-			chomp++;
-		buf[chomp] = '\0';
-		if ( strcmp( buf, RADIANT_MINOR_VERSION ) ) {
-			Sys_FPrintf( SYS_ERR, "ERROR: file RADIANT_MINOR doesn't match ('%s')\n", buf );
-			bVerIsGood = false;
-		}
-	}
-	else
-	{
-		Sys_FPrintf( SYS_ERR, "ERROR: can't find RADIANT_MINOR in '%s'\n", ver_file_name.GetBuffer() );
-		bVerIsGood = false;
-	}
-	if ( !bVerIsGood ) {
-		CString msg;
-		msg = "This editor binary (" RADIANT_VERSION ") doesn't match what the latest setup has configured in this directory\n";
-		msg += "Make sure you run the right/latest editor binary you installed\n";
-		msg += g_strAppPath; msg += "\n";
-		msg += "Check http://www.qeradiant.com/faq/index.cgi?file=219 for more information";
-		gtk_MessageBox( NULL, msg.GetBuffer(), _( "Radiant" ), MB_OK, "http://www.qeradiant.com/faq/index.cgi?file=219" );
-		_exit( -1 );
-	}
-#endif
 
 	g_qeglobals.disable_ini = false;
 	g_PrefsDlg.Init();
@@ -954,8 +885,7 @@ int GenerateDump( EXCEPTION_POINTERS* pExceptionPointers ) {
 	BOOL bMiniDumpSuccessful;
     char szPath[MAX_PATH]; 
     char szFileName[MAX_PATH]; 
-    char szAppName[] = "GTKRadiant";
-    char* szVersion = RADIANT_VERSION;
+    char szAppName[] = "OpenRadiant";
     DWORD dwBufferSize = MAX_PATH;
     HANDLE hDumpFile;
     SYSTEMTIME stLocalTime;
@@ -967,8 +897,8 @@ int GenerateDump( EXCEPTION_POINTERS* pExceptionPointers ) {
     StringCchPrintf( szFileName, MAX_PATH, "%s%s", szPath, szAppName );
     CreateDirectory( szFileName, NULL );
 
-    StringCchPrintf( szFileName, MAX_PATH, "%s%s\\%s-%s-%04d%02d%02d-%02d%02d%02d.dmp", 
-               szPath, szAppName, szAppName, szVersion, 
+    StringCchPrintf( szFileName, MAX_PATH, "%s%s\\%s-%04d%02d%02d-%02d%02d%02d.dmp", 
+               szPath, szAppName, szAppName, 
                stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay, 
                stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond );
     hDumpFile = CreateFile(szFileName, GENERIC_READ|GENERIC_WRITE, 

@@ -33,15 +33,17 @@
 // DESCRIPTION:
 // monitoring window for running BSP processes (and possibly various other stuff)
 
-#include "stdafx.h"
-#include "watchbsp.h"
-#include "feedback.h"
-
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <winsock2.h>
 #endif
 
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#include "qe3.h"
+#include "watchbsp.h"
+#include "feedback.h"
+
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined ( USE_POSIX )
 #include <sys/time.h>
 #define SOCKET_ERROR -1
 #endif
@@ -421,7 +423,7 @@ void CWatchBSP::RoutineProcessing(){
 #ifdef _WIN32
 	TIMEVAL tout = { 0, 0 };
 #endif
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined ( USE_POSIX )
 	timeval tout;
 	tout.tv_sec = 0;
 	tout.tv_usec = 0;

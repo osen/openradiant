@@ -29,7 +29,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "stdafx.h"
+#include "qe3.h"
 #include "str.h"
 
 static byte *row1 = NULL, *row2 = NULL;

@@ -25,7 +25,7 @@
 // classes used for describing geometry information from q3map feedback
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 
 #include "feedback.h"
 #include "glib.h"

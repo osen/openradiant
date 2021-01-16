@@ -20,7 +20,6 @@
  */
 
 #include "plugin.h"
-#include "version.h"
 
 // =============================================================================
 // Globals
@@ -121,7 +120,7 @@ bool CSynapseClientMap::OnActivate() {
 }
 
 const char* CSynapseClientMap::GetInfo(){
-	return "MAP format module built " __DATE__ " " RADIANT_VERSION;
+	return "MAP format module built " __DATE__;
 }
 
 const char* CSynapseClientMap::GetName(){

@@ -34,7 +34,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -2365,7 +2365,7 @@ void DoAbout(){
 	gtk_widget_show( info_hbox );
 
 	GtkWidget *info_label = gtk_label_new( 
-		"OpenRadiant " RADIANT_VERSION " - " __DATE__ "\n"
+		"OpenRadiant - " __DATE__ "\n"
 		RADIANT_ABOUTMSG "\nkpedersen@thamessoftware.co.uk\n\n"
 		"This product contains software technology from id Software, Inc.\n"
 		"('id Technology'). id Technology 2000 id Software, Inc.\n"

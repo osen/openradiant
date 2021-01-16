@@ -122,10 +122,8 @@ bool CSynapseClientImage::OnActivate() {
 	return true;
 }
 
-#include "version.h"
-
 const char* CSynapseClientImage::GetInfo(){
-	return "image formats JPG TGA PCX BMP module built " __DATE__ " " RADIANT_VERSION;
+	return "image formats JPG TGA PCX BMP module built " __DATE__;
 }
 
 }

@@ -78,7 +78,6 @@ void CheckWatchit( char *msg );
 // NOTE: for win32 users, cygwin installation is REQUIRED to run makeversion.sh
 // NOTE TTimo if any of those changes (they might change a lot), then the whole app is rebuilt.
 //   very often it's not necessary
-#include "version.h"
 #include "aboutmsg.h"
 
 // synapse is our utility lib for dynamic shared objects management

@@ -26,7 +26,7 @@
 // Quick interface hack for selected face interface
 // this one really needs more work, but I'm in a hurry with TexTool
 
-#include "stdafx.h"
+#include "qe3.h"
 //#include "qe3.h"
 
 // stores objects that want to be hooked into drawing in the XY window or Camera view

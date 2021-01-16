@@ -35,7 +35,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 
 #include <stdio.h>
 #include <memory.h>

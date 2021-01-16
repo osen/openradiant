@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "stdafx.h"
+#include "qe3.h"
 
 /*
     Rambetter on Sun Jan 23, 2011:

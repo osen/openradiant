@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <errno.h>
 
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined ( USE_POSIX )
   #include <dirent.h>
   #include <unistd.h>
 #else

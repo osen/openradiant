@@ -26,7 +26,7 @@
 //
 
 #include <gdk/gdkkeysyms.h>
-#include "stdafx.h"
+#include "qe3.h"
 #include "patchdialog.h"
 #include <glib/gi18n.h>
 

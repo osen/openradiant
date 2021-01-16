@@ -29,7 +29,7 @@
 
 #include <glib/gi18n.h>
 
-#include "stdafx.h"
+#include "qe3.h"
 #include "gtkmisc.h"
 
 //
@@ -206,7 +206,7 @@ const char* GetParam( char*& pBuffer ){
 	static CString strParam;
 	bool bStringMode = false;
 
-	while ( *pBuffer != (char)NULL && isspace( *pBuffer ) ) // skip and whitespace
+	while ( *pBuffer != (char)0 && isspace( *pBuffer ) ) // skip and whitespace
 		pBuffer++;
 
 	if ( *pBuffer == '(' ) { // if it's an opening paren, skip it
@@ -221,16 +221,16 @@ const char* GetParam( char*& pBuffer ){
 	strParam = "";
 
 	if ( bStringMode ) {
-		while ( *pBuffer != (char)NULL && *pBuffer != '\"' )
+		while ( *pBuffer != (char)0 && *pBuffer != '\"' )
 			strParam += *pBuffer++;
 	}
 	else
 	{
-		while ( *pBuffer != (char)NULL && *pBuffer != ' ' && *pBuffer != ')' && *pBuffer != ',' )
+		while ( *pBuffer != (char)0 && *pBuffer != ' ' && *pBuffer != ')' && *pBuffer != ',' )
 			strParam += *pBuffer++;
 	}
 
-	if ( *pBuffer != (char)NULL ) { // skip last char
+	if ( *pBuffer != (char)0 ) { // skip last char
 		pBuffer++;
 	}
 
@@ -572,17 +572,17 @@ void RunScript( char* pBuffer ){
 
 	while ( g_bKeepGoing && pBuffer && *pBuffer )
 	{
-		while ( *pBuffer != (char)NULL && *pBuffer != '_' )
+		while ( *pBuffer != (char)0 && *pBuffer != '_' )
 			pBuffer++;
 
 		char* pTemp = pBuffer;
 		int nLen = 0;
-		while ( *pTemp != (char)NULL && *pTemp != '(' )
+		while ( *pTemp != (char)0 && *pTemp != '(' )
 		{
 			pTemp++;
 			nLen++;
 		}
-		if ( *pBuffer != (char)NULL ) {
+		if ( *pBuffer != (char)0 ) {
 			bool bFound = false;
 			for ( int i = 0; i < g_nScriptCmdCount; i++ )
 			{

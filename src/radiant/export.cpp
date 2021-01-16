@@ -1,14 +1,17 @@
 #include "export.h"
-//#include "qe3.h"
 #include "env.h"
 
 #include <orplugin.h>
 
 #include <string>
 
-HINSTANCE hinstLib;
+#ifdef _WIN32
+	#define CDECL __cdecl
+#else
+	#define CDECL
+#endif
 
-typedef void (__cdecl *FUNC)(PluginData*, bool, bool);
+typedef void (CDECL *FUNC)(PluginData*, bool, bool);
 FUNC func;
 
 void export_obj(bool bake, bool preview)
@@ -35,3 +38,4 @@ void export_obj(bool bake, bool preview)
 
 	func(&pd, bake, preview);
 }
+

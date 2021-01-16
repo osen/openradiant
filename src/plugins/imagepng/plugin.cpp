@@ -84,10 +84,8 @@ bool CSynapseClientImage::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-#include "version.h"
-
 const char* CSynapseClientImage::GetInfo(){
-	return "PNG loader module built " __DATE__ " " RADIANT_VERSION;
+	return "PNG loader module built " __DATE__;
 }
 
 

@@ -19,7 +19,7 @@
    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <sys/stat.h>
 #if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
 #include <dirent.h>

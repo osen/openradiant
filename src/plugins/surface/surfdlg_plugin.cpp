@@ -111,10 +111,8 @@ bool CSynapseClient_SurfDLG::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-#include "version.h"
-
 const char* CSynapseClient_SurfDLG::GetInfo(){
-	return "Surface Dialog (Quake 3) module built " __DATE__ " " RADIANT_VERSION;
+	return "Surface Dialog (Quake 3) module built " __DATE__;
 }
 
 const char* CSynapseClient_SurfDLG::GetName(){

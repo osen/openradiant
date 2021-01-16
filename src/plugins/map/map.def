@@ -1,7 +1,0 @@
-; mapq3.def : Declares the module parameters for the DLL.
-
-LIBRARY      "MAP"
-
-EXPORTS
-    ; Explicit exports can go here
-	Synapse_EnumerateInterfaces @1

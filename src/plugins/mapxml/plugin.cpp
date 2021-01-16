@@ -86,10 +86,8 @@ bool CSynapseClientXMap::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-#include "version.h"
-
 const char* CSynapseClientXMap::GetInfo(){
-	return "XMAP module built " __DATE__ " " RADIANT_VERSION;
+	return "XMAP module built " __DATE__;
 }
 
 const char* CSynapseClientXMap::GetName(){

@@ -23,7 +23,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "stdafx.h"
+#include "qe3.h"
 #if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
   #include <dirent.h>
   #include <sys/time.h>
@@ -44,8 +44,6 @@ extern "C" {
 #include "plugin.h"
 #include "missing.h"
 #include "filters.h"
-
-#include "version.h"
 
 CRadiantImageManager g_ImageManager;
 CRadiantPluginManager g_PluginsManager;
@@ -2362,7 +2360,7 @@ bool CSynapseClientRadiant::RequestAPI( APIDescriptor_t *pAPI ){
 }
 
 const char* CSynapseClientRadiant::GetInfo(){
-	return "Radiant - synapse core built " __DATE__ " " RADIANT_VERSION;
+	return "Radiant - synapse core built " __DATE__;
 }
 
 const char* CSynapseClientRadiant::GetName(){

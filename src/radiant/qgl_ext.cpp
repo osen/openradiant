@@ -26,7 +26,7 @@
 ** I wanted a C++ file for some new qgl stuff
 */
 
-#include "stdafx.h"
+#include "qe3.h"
 
 int Sys_QGL_ExtensionSupported( const char *extension ){
 	int ret;

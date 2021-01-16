@@ -26,7 +26,7 @@
 #include <glib/gstdio.h>
 
 #include "synapse.h"
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined( USE_POSIX )
   #include <dirent.h>
 #endif
 
@@ -217,7 +217,7 @@ bool CSynapseServer::Initialize( const char* conf_file, PFN_SYN_PRINTF_VA pf ){
 				// too small to be isolated in win32/ and linux/ directories..
 #if defined( _WIN32 )
 				const char* ext_so = ".dll";
-#elif defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#elif defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined( USE_POSIX )
 				const char* ext_so = ".so";
 #endif
 				const char* ext = strrchr( name, '.' );
@@ -265,6 +265,17 @@ bool CSynapseServer::Initialize( const char* conf_file, PFN_SYN_PRINTF_VA pf ){
 
 	return true;
 }
+
+#ifdef USE_POSIX
+void CSynapseServer::EmbedInterfaces(Str& soname, PFN_SYNAPSE_ENUMERATEINTERFACES ep) {
+	CSynapseClientSlot slot;
+	slot.mpDLL = NULL;
+	slot.mpEnumerate = ep;
+	slot.mpClient = slot.mpEnumerate(SYNAPSE_VERSION, this);
+	slot.mFileName = soname;
+	mClients.push_front(slot);
+}
+#endif
 
 #if defined( _WIN32 )
 #define FORMAT_BUFSIZE 2048
@@ -331,7 +342,7 @@ void CSynapseClientSlot::ReleaseSO(){
 	mpDLL = NULL;
 }
 
-#elif defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#elif defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined ( USE_POSIX )
 void CSynapseServer::EnumerateInterfaces( Str &soname ){
 	CSynapseClientSlot slot;
 	slot.mpDLL = dlopen( soname.GetBuffer(), RTLD_NOW );
@@ -1010,10 +1021,8 @@ bool CSynapseClient::AddAPI( const char *major, const char *minor, int size, EAP
 	return true;
 }
 
-#include "version.h"
-
 const char* CSynapseClient::GetInfo(){
-	return "CSynapseClient built " __DATE__ " " RADIANT_VERSION;
+	return "CSynapseClient built " __DATE__;
 }
 
 bool CSynapseClient::CheckSetActive(){

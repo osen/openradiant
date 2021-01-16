@@ -113,10 +113,8 @@ bool CSynapseClientEntity::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-#include "version.h"
-
 const char* CSynapseClientEntity::GetInfo(){
-	return "Entity module built " __DATE__ " " RADIANT_VERSION;
+	return "Entity module built " __DATE__;
 }
 
 }

@@ -21,7 +21,7 @@
 
 
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <assert.h>
 #include "winding.h"
 

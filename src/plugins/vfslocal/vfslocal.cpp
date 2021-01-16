@@ -102,10 +102,8 @@ bool CSynapseClientVFS::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-#include "version.h"
-
 const char* CSynapseClientVFS::GetInfo(){
-	return "PK3 VFS module built " __DATE__ " " RADIANT_VERSION;
+	return "PK3 VFS module built " __DATE__;
 }
 
 }

@@ -25,7 +25,7 @@
 // implementation of IMessaging specific interface
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 
 CPtrArray l_Listeners[RADIANT_MSGCOUNT];
 CPtrArray l_WindowListeners;

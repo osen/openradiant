@@ -25,7 +25,7 @@
 // Quick interface hack for selected face interface
 // this one really needs more work, but I'm in a hurry with TexTool
 
-#include "stdafx.h"
+#include "qe3.h"
 
 int WINAPI QERApp_GetSelectedFaceCount(){
 	return g_ptrSelectedFaces.GetSize();

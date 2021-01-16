@@ -24,7 +24,7 @@
 // DESCRIPTION:
 // implementation of isurfaceplugin-interface specifics
 
-#include "stdafx.h"
+#include "qe3.h"
 
 void QERApp_GetTwoSelectedPatch( patchMesh_t **p1, patchMesh_t **p2 ){
 	*p1 = NULL; *p2 = NULL;

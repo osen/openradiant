@@ -1,5 +1,4 @@
 #include "env.h"
-
 #include "qe3.h"
 
 #ifdef _WIN32
@@ -8,6 +7,11 @@
 #else
 	#include <dirent.h>
 #endif
+
+#include <sstream>
+#include <iostream>
+
+#include <stdio.h>
 
 static std::string projectName;
 static std::string projectRoot;
@@ -61,11 +65,45 @@ std::string ExtractBasename(const std::string& path)
 
 void Env_Init(int argc, char* argv[])
 {
+#ifdef _WIN32
 	TCHAR szFileName[MAX_PATH];
 	GetModuleFileName(NULL, szFileName, MAX_PATH);
 	exePath = szFileName;
 
 	binDir = ExtractDirname(exePath);
+#else
+	std::stringstream cmd;
+	cmd << "cd \"$(dirname \"$(which \"" << argv[0] << "\")\")\" && pwd";
+
+	FILE* p = popen(cmd.str().c_str(), "r");
+
+	if(!p)
+	{
+		Error("Failed to open pipe");
+	}
+
+	char tmp[PATH_MAX] = {0};
+	fread(tmp, sizeof(char), PATH_MAX - 1, p);
+	pclose(p);
+
+	for(size_t ci = 0; ci < strlen(tmp); ci++)
+	{
+		if(tmp[ci] == '\r' || tmp[ci] == '\n')
+		{
+			tmp[ci] = '\0';
+		}
+	}
+
+	binDir = tmp;
+	exePath = binDir;
+
+	if(exePath.length() > 0)
+	{
+		exePath += "/";
+	}
+
+	exePath += ExtractBasename(argv[0]);
+#endif
 }
 
 std::string Env_BinDirectory()
@@ -228,10 +266,15 @@ int Env_CopyFile(const char* filename, void** bufferptr)
 }
 
 static bool loaded;
+#ifdef _WIN32
 static HINSTANCE hinstLib;
+#else
+static void *libHandle;
+#endif
 
 FuncPtr Env_Extension(const std::string& entry)
 {
+#ifdef _WIN32
 	if (!loaded)
 	{
 		std::string dllPath = Env_BinDirectory() + "\\orextensions.dll";
@@ -242,6 +285,26 @@ FuncPtr Env_Extension(const std::string& entry)
 	if(!hinstLib) return NULL;
 
 	FuncPtr rtn = (FuncPtr)GetProcAddress(hinstLib, entry.c_str());
+#else
+	if (!loaded)
+	{
+		std::string soPath = Env_BinDirectory() + "/liborextensions.so";
+		libHandle = dlopen(soPath.c_str(), RTLD_NOW);
+		loaded = true;
+	}
+
+	if(!libHandle)
+	{
+		Error("Failed to load extensions library");
+	}
+
+	FuncPtr rtn = (FuncPtr)dlsym(libHandle, entry.c_str());
+
+	if(!rtn)
+	{
+		Error("Failed to locate extension entry point");
+	}
+#endif
 
 	return rtn;
 }

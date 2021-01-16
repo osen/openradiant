@@ -25,7 +25,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 
 typedef struct
 {
@@ -55,21 +55,21 @@ void QueueFace( face_t *face ){
 	}
 
 	for ( i = 0; i < len; i++ )
-		if ( sort[i].texture == face->d_texture ) {
-			g_ptr_array_add( sort[i].faces, face );
+		if ( ::sort[i].texture == face->d_texture ) {
+			g_ptr_array_add( ::sort[i].faces, face );
 			return;
 		}
 
 	if ( len == alloc ) {
 		alloc += 8;
-		sort = (windingsort_t*)realloc( sort, alloc * sizeof( windingsort_t ) );
+		::sort = (windingsort_t*)realloc( ::sort, alloc * sizeof( windingsort_t ) );
 
 		for ( i = len; i < alloc; i++ )
-			sort[i].faces = g_ptr_array_new();
+			::sort[i].faces = g_ptr_array_new();
 	}
-	g_ptr_array_set_size( sort[len].faces, 0 );
-	g_ptr_array_add( sort[len].faces, face );
-	sort[len].texture = face->d_texture;
+	g_ptr_array_set_size( ::sort[len].faces, 0 );
+	g_ptr_array_add( ::sort[len].faces, face );
+	::sort[len].texture = face->d_texture;
 	len++;
 }
 
@@ -123,11 +123,11 @@ void QueueDraw(){
 
 	for ( k = 0; k < len; k++ )
 	{
-		qglBindTexture( GL_TEXTURE_2D, sort[k].texture->texture_number );
+		qglBindTexture( GL_TEXTURE_2D, ::sort[k].texture->texture_number );
 
-		for ( i = 0; i < sort[k].faces->len; i++ )
+		for ( i = 0; i < ::sort[k].faces->len; i++ )
 		{
-			face = (face_t*)sort[k].faces->pdata[i];
+			face = (face_t*)::sort[k].faces->pdata[i];
 			w = face->face_winding;
 
 			qglBegin( GL_POLYGON );

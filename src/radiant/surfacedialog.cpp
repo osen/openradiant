@@ -29,7 +29,7 @@
 // would be a good idea to try and remove this file entirely from the compile and see what happens
 
 #include <gdk/gdkkeysyms.h>
-#include "stdafx.h"
+#include "qe3.h"
 #include "surfacedialog.h"
 #include <glib/gi18n.h>
 

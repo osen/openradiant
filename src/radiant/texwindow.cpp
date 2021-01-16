@@ -38,7 +38,7 @@
 #include <gtk/gtk.h>
 #include <assert.h>
 #include <sys/stat.h>
-#include "stdafx.h"
+#include "qe3.h"
 #include "texwindow.h"
 #include "str.h"
 #include "missing.h"

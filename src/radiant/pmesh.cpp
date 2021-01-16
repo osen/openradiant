@@ -26,7 +26,7 @@
 
 #include <glib/gi18n.h>
 
-#include "stdafx.h"
+#include "qe3.h"
 #include "gtkmisc.h"
 
 #include "gtkr_list.h"

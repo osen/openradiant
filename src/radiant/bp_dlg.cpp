@@ -25,7 +25,7 @@
 //
 // custom Gtk dialog for brush primitives load/save
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <glib/gi18n.h>
 
 

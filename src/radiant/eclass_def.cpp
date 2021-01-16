@@ -80,10 +80,8 @@ bool CSynapseBuiltinClientDef::RequestAPI( APIDescriptor_t *pAPI ){
 	return false;
 }
 
-#include "version.h"
-
 const char* CSynapseBuiltinClientDef::GetInfo(){
-	return "Builtin .def module built " __DATE__ " " RADIANT_VERSION;
+	return "Builtin .def module built " __DATE__;
 }
 
 // ------------------------------------------------------------------------------------------------

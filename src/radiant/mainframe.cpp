@@ -25,7 +25,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
@@ -2227,7 +2227,7 @@ void Clipboard_PasteMap(){
    Platform-independent GTK clipboard support.
    \todo Using GDK_SELECTION_CLIPBOARD fails on win32, so we use the win32 API directly for now.
  */
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined ( USE_POSIX )
 
 enum
 {
@@ -3648,6 +3648,7 @@ void MainFrame::OnDestroy(){
 
 // TTimo: now using profile.cpp code
 void MainFrame::LoadCommandMap(){
+	return;
 	FILE *f;
 	CString strINI;
 	bool bUserCmdList = false;
@@ -3658,7 +3659,7 @@ void MainFrame::LoadCommandMap(){
 	int j;
 
 
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined ( USE_POSIX )
 	strINI = g_PrefsDlg.m_rc_path->str;
 #elif defined( WIN32 )
 	strINI = g_strGameToolsPath;
@@ -4733,7 +4734,6 @@ void MainFrame::OnFileCheckUpdate(){
 #else
 	URL += "&OS_dlup=2";
 #endif
-	URL += "&Version_dlup=" RADIANT_VERSION;
 	g_PrefsDlg.mGamesDialog.AddPacksURL( URL );
 	OpenURL( m_pWidget, URL.GetBuffer() );
 }

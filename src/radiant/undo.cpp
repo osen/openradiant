@@ -37,7 +37,7 @@
          maybe also reset the entityId at map load
  */
 
-#include "stdafx.h"
+#include "qe3.h"
 
 typedef struct undo_s
 {

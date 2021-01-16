@@ -93,10 +93,8 @@ CSynapseClient * EnumerateInterfaces( const char *version, CSynapseServer *pServ
 	return &g_SynapseClient;
 }
 
-#include "version.h"
-
 const char* CSynapseClientShaders::GetInfo(){
-	return "Q3/Half-Life shaders module built " __DATE__ " " RADIANT_VERSION;
+	return "Q3/Half-Life shaders module built " __DATE__;
 }
 
 const char* CSynapseClientShaders::GetName(){

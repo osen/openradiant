@@ -34,7 +34,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>

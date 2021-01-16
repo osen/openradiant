@@ -25,7 +25,7 @@
 // Leonardo Zide (leo@lokigames.com)
 //
 
-#include "stdafx.h"
+#include "qe3.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <assert.h>

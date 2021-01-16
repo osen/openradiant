@@ -19,7 +19,7 @@
    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "stdafx.h"
+#include "qe3.h"
 
 #define MAX_POINTFILE   8192
 static vec3_t s_pointvecs[MAX_POINTFILE];

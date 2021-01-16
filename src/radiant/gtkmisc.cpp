@@ -58,7 +58,7 @@
 #define R_OK 04
 #endif
 #endif
-#include "stdafx.h"
+#include "qe3.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>

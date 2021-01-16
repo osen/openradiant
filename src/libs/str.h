@@ -77,7 +77,7 @@ inline char* Q_StrDup( const char* pStr ) {
 	return strcpy( new char[strlen( pStr ) + 1], pStr );
 }
 
-#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ )
+#if defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __APPLE__ ) || defined( USE_POSIX )
 #define strcmpi strcasecmp
 #define stricmp strcasecmp
 #define strnicmp strncasecmp
